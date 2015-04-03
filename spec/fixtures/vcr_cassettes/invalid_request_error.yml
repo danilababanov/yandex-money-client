@@ -2,39 +2,39 @@
 http_interactions:
 - request:
     method: post
-    uri: https://money.yandex.ru/api/incoming-transfer-reject
+    uri: https://money.yandex.ru/api/request-payment
     body:
       encoding: UTF-8
-      string: operation_id=
+      string: ''
     headers:
       Authorization:
-      - Bearer <ACCESS_TOKEN>
+      - Bearer WRONG TOKEN
       Content-Type:
       - application/x-www-form-urlencoded
   response:
     status:
-      code: 200
-      message: OK
+      code: 400
+      message: Bad Request
     headers:
       Server:
       - nginx
       Date:
-      - Mon, 10 Nov 2014 19:24:28 GMT
+      - Fri, 21 Nov 2014 07:21:50 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Content-Length:
-      - '57'
+      - '0'
       Connection:
       - keep-alive
       Keep-Alive:
       - timeout=120
-      Vary:
-      - Accept-Encoding
       Cache-Control:
       - no-cache
+      Www-Authenticate:
+      - Bearer error="invalid_request"
     body:
       encoding: UTF-8
-      string: '{"status":"refused","error":"illegal_param_operation_id"}'
+      string: ''
     http_version: 
-  recorded_at: Mon, 10 Nov 2014 19:24:30 GMT
+  recorded_at: Fri, 21 Nov 2014 07:21:52 GMT
 recorded_with: VCR 2.9.3
