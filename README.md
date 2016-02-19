@@ -95,8 +95,8 @@ when [register](https://sp-money.yandex.ru/myservices/new.xml) app in Yandex.Mon
         "pattern_id": "p2p",
         "to": "410011161616877",
         "amount_due": "0.02",
-        "comment": "test payment comment from yandex-money-python",
-        "message": "test payment message from yandex-money-python",
+        "comment": "test payment comment from yandex-money-ruby",
+        "message": "test payment message from yandex-money-ruby",
         "label": "testPayment",
         "test_payment": true,
         "test_result": "success"
