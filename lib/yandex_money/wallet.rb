@@ -34,7 +34,7 @@ module YandexMoney
     #
     # @see http://api.yandex.com/money/doc/dg/reference/operation-history.xml
     # @see https://tech.yandex.ru/money/doc/dg/reference/operation-history-docpage/
-    # 
+    #
     # @param options [Hash] A hash with filter parameters according to documetation
     # @return [Array<RecursiveOpenStruct>] An array containing user's wallet operations.
     #
@@ -152,9 +152,10 @@ module YandexMoney
     # @param client_id [String] The client_id that was assigned to the application during registration
     # @param redirect_uri [String] URI that the OAuth server sends the authorization result to. Must have a string value that exactly matches the redirect_uri parameter specified in the application registration data. Any additional parameters required for the application can be added at the end of the string.
     # @param scope [String] A list of requested permissions. Items in the list are separated by a space. List items are case-sensitive.
+    # @param extra_options [Hash] A list of extra parameters for request.
     #
     # @return [String] Url to user must be redirected
-    def self.build_obtain_token_url(client_id, redirect_uri, scope)
+    def self.build_obtain_token_url(client_id, redirect_uri, scope, extra_options = {})
       uri = "#{YandexMoney.config.sp_money_url}/oauth/authorize"
       options = {
         client_id: client_id,
@@ -162,7 +163,7 @@ module YandexMoney
         redirect_uri: redirect_uri,
         scope: scope
       }
-      HTTParty.post(uri, body: options).request.path.to_s
+      HTTParty.post(uri, body: options.merge(extra_options)).request.path.to_s
     end
 
     # Access token request
