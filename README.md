@@ -1,14 +1,14 @@
-[![Build Status](https://travis-ci.org/yandex-money/yandex-money-sdk-ruby.svg)](https://travis-ci.org/yandex-money/yandex-money-sdk-ruby)
-[![Coverage Status](https://img.shields.io/coveralls/yandex-money/yandex-money-sdk-ruby.svg)](https://coveralls.io/r/yandex-money/yandex-money-sdk-ruby)
-[![Code Climate](https://codeclimate.com/github/yandex-money/yandex-money-sdk-ruby/badges/gpa.svg)](https://codeclimate.com/github/yandex-money/yandex-money-sdk-ruby)
-[![Gem Version](https://badge.fury.io/rb/yandex-money-sdk.svg)](http://badge.fury.io/rb/yandex-money-sdk)
-[![Dependency Status](https://gemnasium.com/yandex-money/yandex-money-sdk-ruby.svg)](https://gemnasium.com/yandex-money/yandex-money-sdk-ruby)
+[![Build Status](https://travis-ci.org/serverscom/yandex-money-client.svg)](https://travis-ci.org/yandex-money/yandex-money-client)
+[![Gem Version](https://badge.fury.io/rb/yandex-money-client.svg)](http://badge.fury.io/rb/yandex-money-client)
+[![Dependency Status](https://gemnasium.com/serverscom/yandex-money-client.svg)](https://gemnasium.com/serverscom/yandex-money-client)
 
-# Ruby Yandex.Money API SDK
+# Ruby Yandex.Money API Client
+
+This gem is a fork of [Yandex Money SDK](https://github.com/yandex-money/yandex-money-sdk-ruby)
 
 ## Requirements
 
-Supported ruby versions: 1.9.3, 2.0, 2.1, jruby, rbx-2
+Supported ruby versions: 1.9.3, 2.0, 2.1, 2.2, 2.3, jruby, rbx-2
 
 ## Links
 
@@ -23,7 +23,7 @@ Supported ruby versions: 1.9.3, 2.0, 2.1, jruby, rbx-2
 Add this line to your Gemfile:
 
 ```ruby
-gem 'yandex-money-sdk'
+gem 'yandex-money-client'
 ```
 
 And then execute:
@@ -35,7 +35,7 @@ bundle
 Or install it manually with:
 
 ```
-gem install yandex-money-sdk
+gem install yandex-money-client
 ```
 
 Next, require it in application:
@@ -141,7 +141,7 @@ result in DB).
     end
     ```
 
-3. Process the request with process-payment. 
+3. Process the request with process-payment.
 
     ```ruby
     api = YandexMoney::ExternalPayment.new(INSTANCE_ID)

@@ -1,18 +1,17 @@
 # coding: utf-8
-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'yandex_money/api/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "yandex-money-sdk"
-  spec.description   = "SDK for Yandex Money API"
+  spec.name          = "yandex-money-client"
+  spec.description   = "Client for Yandex Money API"
   spec.version       = YandexMoney::Api::VERSION
   spec.authors       = ["Alexander Maslov"]
   spec.email         = ["drakmail@delta.pm"]
   spec.summary       = %q{Yandex money API for ruby.}
-  spec.homepage      = "https://github.com/yandex-money/yandex-money-sdk-ruby"
+  spec.homepage      = "https://github.com/serverscom/yandex-money-client"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
