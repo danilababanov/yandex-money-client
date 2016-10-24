@@ -1,10 +1,7 @@
-require "httparty"
-require "recursive-open-struct"
-
 module YandexMoney
   # Payments from the Yandex.Money wallet
   class Wallet
-    include HTTParty
+    include YandexMoney::Client
 
     base_uri YandexMoney.config.money_url
     default_timeout 30
@@ -27,7 +24,7 @@ module YandexMoney
     # @raise [YandexMoney::InsufficientScopeError] The token does not have permissions for the requested operation.
     # @raise [YandexMoney::ServerError] A technical error occurs (the server responds with the HTTP code 500 Internal Server Error). The application should repeat the request with the same parameters later.
     def account_info
-      RecursiveOpenStruct.new send_request("/api/account-info", recurse_over_arrays: true).parsed_response
+      RecursiveOpenStruct.new send_request("/api/account-info").body
     end
 
     # Returns operation history of a user's wallet
@@ -44,7 +41,7 @@ module YandexMoney
     # @raise [YandexMoney::ServerError] A technical error occurs (the server responds with the HTTP code 500 Internal Server Error). The application should repeat the request with the same parameters later.
     def operation_history(options=nil)
       history = RecursiveOpenStruct.new(
-        send_request("/api/operation-history", options).parsed_response
+        send_request("/api/operation-history", options).body
       )
       history.operations = history.operations.map do |operation|
         RecursiveOpenStruct.new operation
@@ -65,8 +62,8 @@ module YandexMoney
     # @raise [YandexMoney::InsufficientScopeError] The token does not have permissions for the requested operation.
     # @raise [YandexMoney::ServerError] A technical error occurs (the server responds with the HTTP code 500 Internal Server Error). The application should repeat the request with the same parameters later.
     def operation_details(operation_id)
-      request = send_request("/api/operation-details", operation_id: operation_id)
-      RecursiveOpenStruct.new request.parsed_response
+      response = send_request("/api/operation-details", operation_id: operation_id)
+      RecursiveOpenStruct.new response.body
     end
 
     # Requests a payment
@@ -124,7 +121,7 @@ module YandexMoney
       else
         request_body = { operation_id: operation_id }
       end
-      RecursiveOpenStruct.new send_request("/api/incoming-transfer-accept", request_body)
+      RecursiveOpenStruct.new send_request("/api/incoming-transfer-accept", request_body).body
     end
 
     # Rejects incoming transfer with a protection code or deferred transfer
@@ -140,7 +137,7 @@ module YandexMoney
     # @raise [YandexMoney::InsufficientScopeError] The token does not have permissions for the requested operation.
     # @raise [YandexMoney::ServerError] A technical error occurs (the server responds with the HTTP code 500 Internal Server Error). The application should repeat the request with the same parameters later.
     def incoming_transfer_reject(operation_id)
-      RecursiveOpenStruct.new send_request("/api/incoming-transfer-reject", operation_id: operation_id)
+      RecursiveOpenStruct.new send_request("/api/incoming-transfer-reject", operation_id: operation_id).body
     end
 
     # Request a authorization URL
@@ -163,7 +160,7 @@ module YandexMoney
         redirect_uri: redirect_uri,
         scope: scope
       }
-      HTTParty.post(uri, body: options.merge(extra_options)).request.path.to_s
+      YandexMoney::Client.post(uri, body: options.merge(extra_options)).headers['location']
     end
 
     # Access token request
@@ -187,30 +184,32 @@ module YandexMoney
         redirect_uri: redirect_uri
       }
       options[:client_secret] = client_secret if client_secret
-      response = HTTParty.post(uri, body: options).parsed_response
+
+      response = YandexMoney::Client.post(uri, body: options).body
       response["access_token"]
     end
 
     protected
 
     def send_request(uri, options = nil)
-      request = self.class.post(uri, headers: {
+      response = self.class.post(uri, headers: {
         "Authorization" => "Bearer #{@token}",
         "Content-Type" => "application/x-www-form-urlencoded"
       }, body: options)
-      case request.response.code
-      when "400" then raise YandexMoney::InvalidRequestError.new request.response
-      when "401" then raise YandexMoney::UnauthorizedError.new request.response
-      when "403" then raise YandexMoney::InsufficientScopeError.new request.response
-      when "500" then raise YandexMoney::ServerError
+
+      case response.status
+      when 400 then raise YandexMoney::InvalidRequestError.new response
+      when 401 then raise YandexMoney::UnauthorizedError.new response
+      when 403 then raise YandexMoney::InsufficientScopeError.new response
+      when 500 then raise YandexMoney::ServerError
       else
-        request
+        response
       end
     end
 
     def send_payment_request(uri, options)
-      request = send_request(uri, options)
-      RecursiveOpenStruct.new request.parsed_response
+      response = send_request(uri, options)
+      RecursiveOpenStruct.new(response.body, recurse_over_arrays: true)
     end
   end
 end

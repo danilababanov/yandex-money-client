@@ -6,6 +6,7 @@ Bundler.setup
 
 require 'yandex_money/api'
 require 'vcr'
+require 'pry'
 
 IGNORED = %w(
   ./spec/support/constants.example.rb
